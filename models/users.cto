@@ -1,0 +1,20 @@
+/**
+ * New model file
+ */
+
+namespace users
+
+participant ClinicAdmin identified by username {
+  o String username
+  o String name
+}
+
+participant Doctor identified by username {
+  o String username
+  o String name
+}
+
+participant Patient identified by username {
+  o String username
+  o String name
+}

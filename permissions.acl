@@ -1,0 +1,126 @@
+
+
+rule ClinicAdminManageDoctors {
+  description: "ClinicAdminManageDoctors"
+  participant: "users.ClinicAdmin"
+  operation: ALL
+  resource: "users.Doctor"
+  action: ALLOW
+}
+
+rule ClinicAdminManagePatients {
+  description: "ClinicAdminManagePatients"
+  participant: "users.ClinicAdmin"
+  operation: ALL
+  resource: "users.Patient"
+  action: ALLOW
+}
+
+rule ClinicAdminManagesDoctorAssignment {
+  description: "ClinicAdminManagePatients"
+  participant: "users.ClinicAdmin"
+  operation: ALL
+  resource: "assets.DoctorAssignment"
+  action: ALLOW
+}
+
+rule ClinicAdminAssigns {
+  description: "ClinicAdminManagePatients"
+  participant: "users.ClinicAdmin"
+  operation: ALL
+  resource: "assets.Assign"
+  action: ALLOW
+}
+
+rule ClinicAdminUnssigns {
+  description: "ClinicAdminManagePatients"
+  participant: "users.ClinicAdmin"
+  operation: ALL
+  resource: "assets.Unassign"
+  action: ALLOW
+}
+
+rule DoctorCreatesRecord {
+  description: "DoctorCreatesAssets"
+  participant: "users.Doctor"
+  operation: CREATE
+  resource: "assets.Record"
+  action: ALLOW
+}
+
+rule DoctorCallsCreatesRecord {
+  description: "DoctorCreatesAssets"
+  participant: "users.Doctor"
+  operation: CREATE
+  resource: "assets.CreateRecord"
+  action: ALLOW
+}
+
+rule DoctorReadUpdateOwnRecords {
+  description: "DoctorReadUpdateOwnAssets"
+  participant(d): "users.Doctor"
+  operation: READ, UPDATE, DELETE
+  resource(r): "assets.Record"
+  condition: (r.doctorAssignment.doctor.getIdentifier() == d.getIdentifier())
+  action: ALLOW
+}
+
+rule DoctorReadOwnAssignments {
+  description: "DoctorReadUpdateOwnAssignments"
+  participant(d): "users.Doctor"
+  operation: READ
+  resource(a): "assets.DoctorAssignment"
+  condition: (a.doctor.getIdentifier() == d.getIdentifier())
+  action: ALLOW
+}
+
+rule PatientReadOwnRecords {
+  description: "PatientrReadOwnAssets"
+  participant(p): "users.Patient"
+  operation: ALL
+  resource(r): "assets.Record"
+ condition: (r.doctorAssignment.patient.getIdentifier() == p.getIdentifier())
+  action: ALLOW
+}
+
+rule PatientReadOwnAssignments {
+  description: "PatientrReadOwnAssets"
+  participant(p): "users.Patient"
+  operation: ALL
+  resource(d): "assets.DoctorAssignment"
+ condition: (d.patient.getIdentifier() == p.getIdentifier())
+  action: ALLOW
+}
+
+rule PatientrReadOwnProfile {
+  description: "PatientrReadOwnAssets"
+  participant(p1): "users.Patient"
+  operation: READ
+  resource(p2): "users.Patient"
+  condition: (p1.getIdentifier() == p2.getIdentifier())
+  action: ALLOW
+}
+
+rule AllSystemAccess {
+  description: "All system access to everybody"
+  participant: "org.hyperledger.composer.system.Participant"
+  operation: ALL
+  resource: "org.hyperledger.composer.system.**"
+  action: ALLOW
+}
+
+rule NetworkAdminUser {
+    description: "Grant business network administrators full access to user resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "**"
+    action: ALLOW
+}
+
+rule NetworkAdminSystem {
+    description: "Grant business network administrators full access to system resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "org.hyperledger.composer.system.**"
+    action: ALLOW
+}

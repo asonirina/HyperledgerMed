@@ -1,0 +1,40 @@
+/**
+ * New model file
+ */
+
+namespace assets
+
+import  users.Doctor
+import  users.Patient
+
+enum Status {
+  o ACTIVE 
+  o INACTIVE
+}
+
+asset DoctorAssignment identified by assignmentId {
+   o String assignmentId
+   o Status status
+    --> Doctor doctor
+    --> Patient patient
+}
+
+asset Record identified by recordId {
+    o String recordId
+    o String content
+    --> DoctorAssignment doctorAssignment
+}
+
+transaction Assign  {
+  --> Doctor doctor
+  --> Patient patient
+}
+
+transaction Unassign {
+  --> DoctorAssignment assignment
+}
+
+transaction CreateRecord {
+  o String content
+  --> DoctorAssignment doctorAssignment
+}
